@@ -54,8 +54,8 @@ async def list_portfolios(request: Request):
 
 @router.get("/{portfolio_id}")
 async def get_portfolio(portfolio_id: int, request: Request):
-    get_current_user(request)
-    data = await portfolio_service.get_portfolio_summary(portfolio_id)
+    user = get_current_user(request)
+    data = await portfolio_service.get_portfolio_summary(portfolio_id, user["id"])
     if "error" in data:
         raise HTTPException(status_code=404, detail=data["error"])
     return {"data": data}
@@ -63,8 +63,8 @@ async def get_portfolio(portfolio_id: int, request: Request):
 
 @router.delete("/{portfolio_id}")
 async def delete_portfolio(portfolio_id: int, request: Request):
-    get_current_user(request)
-    ok = portfolio_service.delete_portfolio(portfolio_id)
+    user = get_current_user(request)
+    ok = portfolio_service.delete_portfolio(portfolio_id, user["id"])
     if not ok:
         raise HTTPException(status_code=404, detail="Portfolio not found")
     return {"data": {"deleted": True}}
@@ -72,7 +72,7 @@ async def delete_portfolio(portfolio_id: int, request: Request):
 
 @router.post("/{portfolio_id}/transaction")
 async def add_transaction(portfolio_id: int, body: TransactionRequest, request: Request):
-    get_current_user(request)
+    user = get_current_user(request)
     result = portfolio_service.add_transaction(
         portfolio_id, body.code, body.name, body.tx_type,
         body.quantity, body.price, body.fee,

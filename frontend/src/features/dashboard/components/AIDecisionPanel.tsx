@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown, Minus, Target, Shield, AlertTriangle, Zap, BarChart3, Activity } from 'lucide-react'
+import { requestJson } from '../../../services/api'
 
 interface DecisionDashboard {
   code: string
@@ -120,8 +121,7 @@ export default function AIDecisionPanel({ code, market }: { code: string; market
     setLoading(true)
     setError(null)
     // Use fast mode for instant results; remove 'fast' param for full LLM analysis
-    fetch(`/api/analysis/stock/${code}?market=${market}&fast=true`)
-      .then(r => r.json())
+    requestJson<any>(`/api/analysis/stock/${code}?market=${market}&fast=true`)
       .then(d => { if (active) setData(d) })
       .catch(e => { if (active) setError(e.message) })
       .finally(() => { if (active) setLoading(false) })

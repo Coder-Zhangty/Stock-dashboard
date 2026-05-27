@@ -74,7 +74,7 @@ async def delete_rule(rule_id: int, request: Request):
 
 
 @router.get("/history")
-async def alert_history(limit: int = 50, request: Request = None):
+async def alert_history(request: Request, limit: int = 50):
     user = get_current_user(request)
     data = alert_service.get_alert_history(user["id"], limit)
     return {"data": data}

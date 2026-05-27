@@ -42,7 +42,7 @@ async def evaluate_predictions(
 ):
     user = get_current_user(request)
     uid = None if (all_users and user.get("is_admin")) else user["id"]
-    result = backtest_service.evaluate_predictions(uid, min_age_days)
+    result = await backtest_service.evaluate_predictions(uid, min_age_days)
     return {"data": result}
 
 

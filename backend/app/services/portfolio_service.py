@@ -11,6 +11,16 @@ logger = logging.getLogger(__name__)
 VALID_TX_TYPES = {"buy", "sell"}
 
 
+def _owns_portfolio(portfolio_id: int, user_id: int) -> bool:
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT id FROM portfolios WHERE id=? AND user_id=?",
+        (portfolio_id, user_id),
+    ).fetchone()
+    conn.close()
+    return row is not None
+
+
 def _validate_transaction(tx_type: str, quantity: int, price: float) -> str | None:
     if tx_type not in VALID_TX_TYPES:
         return f"Invalid transaction type: {tx_type}"
@@ -59,7 +69,9 @@ def get_portfolio(portfolio_id: int) -> dict[str, Any] | None:
     return result
 
 
-def delete_portfolio(portfolio_id: int) -> bool:
+def delete_portfolio(portfolio_id: int, user_id: int | None = None) -> bool:
+    if user_id is not None and not _owns_portfolio(portfolio_id, user_id):
+        return False
     conn = get_connection()
     conn.execute("DELETE FROM portfolios WHERE id=?", (portfolio_id,))
     conn.commit()
@@ -132,8 +144,10 @@ def add_transaction(
     return {"status": "ok", "amount": round(amount, 2)}
 
 
-async def get_portfolio_summary(portfolio_id: int) -> dict[str, Any]:
+async def get_portfolio_summary(portfolio_id: int, user_id: int | None = None) -> dict[str, Any]:
     """Get portfolio summary with real-time P&L."""
+    if user_id is not None and not _owns_portfolio(portfolio_id, user_id):
+        return {"error": "Portfolio not found"}
     portfolio = get_portfolio(portfolio_id)
     if not portfolio:
         return {"error": "Portfolio not found"}

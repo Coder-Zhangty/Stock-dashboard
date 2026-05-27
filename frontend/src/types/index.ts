@@ -147,6 +147,20 @@ export interface FundFlowSummary {
   small: number
 }
 
+export interface IndexItem {
+  code: string
+  name: string
+  latest_price: number
+  change_pct: number
+  change_amount: number
+}
+
+export interface SentimentResult {
+  sentiment: string
+  summary: string
+  news: NewsItem[]
+}
+
 export interface MarketContext {
   code: string
   name: string

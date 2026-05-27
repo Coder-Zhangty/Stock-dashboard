@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import init_db
+from app.core.logging_config import setup_logging
 from app.core.scheduler import init_scheduler, shutdown_scheduler
 from app.api.routes import market, news, watchlist, ws as ws_routes
 from app.api.routes import cross_market, portfolio, analysis, agent, backtest, alerts
@@ -16,12 +17,15 @@ from app.api.routes import auth, chat, conversations, library, workspace, securi
 from app.services import market_service, hk_market_service, us_market_service
 from app.services.ws_manager import ws_manager
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)-8s  %(message)s")
+setup_logging("INFO")
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Runtime security validation
+    settings.validate_runtime()
+
     # Init database (all tables)
     init_db()
     logger.info("Database initialized")

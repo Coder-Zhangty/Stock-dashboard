@@ -11,6 +11,7 @@ from app.services.auth_service import AuthService
 
 # In-memory sliding window rate limiter for unauthenticated routes
 _rate_window: dict[str, list[float]] = defaultdict(list)
+_last_cleanup: float = 0.0
 
 
 def _cleanup_rate_window(key: str, window: float, now: float) -> None:
@@ -18,6 +19,21 @@ def _cleanup_rate_window(key: str, window: float, now: float) -> None:
     cutoff = now - window
     while bucket and bucket[0] < cutoff:
         bucket.pop(0)
+    # Remove stale key entirely once bucket is empty
+    if not bucket:
+        del _rate_window[key]
+
+
+def _sweep_stale_keys(now: float) -> None:
+    """Periodically remove keys whose buckets are entirely expired to prevent unbounded dict growth."""
+    global _last_cleanup
+    # Only sweep every 60 seconds
+    if now - _last_cleanup < 60:
+        return
+    _last_cleanup = now
+    stale = [k for k, v in _rate_window.items() if not v]
+    for k in stale:
+        del _rate_window[k]
 
 
 def rate_limit(max_requests: int = 30, window_seconds: float = 10.0):
@@ -26,6 +42,7 @@ def rate_limit(max_requests: int = 30, window_seconds: float = 10.0):
         client_ip = request.client.host if request.client else "unknown"
         key = f"{client_ip}:{max_requests}:{window_seconds}"
         now = time.time()
+        _sweep_stale_keys(now)
         _cleanup_rate_window(key, window_seconds, now)
         if len(_rate_window[key]) >= max_requests:
             raise HTTPException(

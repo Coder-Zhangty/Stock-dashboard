@@ -30,8 +30,13 @@ build/
 
 # Database files
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
 *.sqlite3
+
+# Runtime storage
+backend/storage/
 
 # Claude Code
 .claude/

@@ -1482,6 +1482,8 @@ def _cost_range(prices: list[float], chips: list[float], total: float, coverage:
     target = total * coverage
 
     while acc_chips < target and (lo > 0 or hi < n - 1):
+        prev_lo, prev_hi = lo, hi
+
         if lo > 0 and hi < n - 1:
             if chips[lo - 1] > chips[hi + 1]:
                 lo -= 1
@@ -1497,9 +1499,9 @@ def _cost_range(prices: list[float], chips: list[float], total: float, coverage:
         else:
             break
 
-        if lo >= 0:
+        if lo != prev_lo:
             acc_chips += chips[lo]
-        if hi > lo:
+        if hi != prev_hi:
             acc_chips += chips[hi]
 
     low_price = round(prices[max(0, lo)], 2)
@@ -1507,5 +1509,3 @@ def _cost_range(prices: list[float], chips: list[float], total: float, coverage:
     concentration = round((high_price - low_price) / (high_price + low_price), 4) if (high_price + low_price) > 0 else 0
 
     return low_price, high_price, concentration
-
-    return {}

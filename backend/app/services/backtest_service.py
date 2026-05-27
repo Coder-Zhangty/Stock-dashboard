@@ -38,7 +38,7 @@ def record_prediction(
     return {"id": rid, "status": "recorded"}
 
 
-def evaluate_predictions(user_id: int | None = None, min_age_days: int = 5) -> dict[str, Any]:
+async def evaluate_predictions(user_id: int | None = None, min_age_days: int = 5) -> dict[str, Any]:
     """Evaluate un-checked predictions against current price data.
 
     Queries the market service for current prices and compares direction
@@ -68,10 +68,9 @@ def evaluate_predictions(user_id: int | None = None, min_age_days: int = 5) -> d
     # Collect unique codes and get current quotes
     codes = list({r["code"] for r in rows})
     from app.services import market_service
-    import asyncio
 
     try:
-        quotes = asyncio.run(market_service.batch_quotes(codes))
+        quotes = await market_service.batch_quotes(codes)
     except Exception:
         logger.warning("Failed to fetch quotes for backtest evaluation")
         quotes = {}

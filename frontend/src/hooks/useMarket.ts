@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import type { StockQuote, KLineItem, NewsItem, WatchlistItem, StockSearchResult, StockBrief, MinuteBar, FundFlowItem, CyqData } from '../types'
+import type { StockQuote, KLineItem, NewsItem, WatchlistItem, StockSearchResult, StockBrief, MinuteBar, FundFlowItem, CyqData, IndexItem, SentimentResult } from '../types'
 import {
   fetchSpotList,
   fetchQuote,
@@ -252,7 +252,7 @@ export function useWatchlist() {
 }
 
 export function useWatchlistQuotes(codes: string[]) {
-  const [quotes, setQuotes] = useState<Record<string, any>>({})
+  const [quotes, setQuotes] = useState<Record<string, Partial<StockQuote>>>({})
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -317,7 +317,7 @@ export function useStockSearch() {
 }
 
 export function useIndices() {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<IndexItem[]>([])
   const [loading, setLoading] = useState(false)
 
   const load = useCallback(async () => {
@@ -454,7 +454,7 @@ export function useNewsSummary() {
 }
 
 export function useStockSentiment(code: string | null, name: string) {
-  const [sentiment, setSentiment] = useState<{ sentiment: string; summary: string; news: any[] } | null>(null)
+  const [sentiment, setSentiment] = useState<SentimentResult | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -549,7 +549,7 @@ export function useCyqData(code: string | null, period = 'daily') {
 // ── HK Market Hooks ──
 
 export function useHKPopular() {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<StockQuote[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -567,7 +567,7 @@ export function useHKPopular() {
 }
 
 export function useHKIndices() {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<IndexItem[]>([])
   const [loading, setLoading] = useState(false)
 
   const load = useCallback(async () => {
@@ -586,7 +586,7 @@ export function useHKIndices() {
 }
 
 export function useHKQuote(code: string | null) {
-  const [data, setData] = useState<any | null>(null)
+  const [data, setData] = useState<StockQuote | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -615,7 +615,7 @@ export function useHKQuote(code: string | null) {
 // ── US Market Hooks ──
 
 export function useUSPopular() {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<StockQuote[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -633,7 +633,7 @@ export function useUSPopular() {
 }
 
 export function useUSIndices() {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<IndexItem[]>([])
   const [loading, setLoading] = useState(false)
 
   const load = useCallback(async () => {
@@ -652,7 +652,7 @@ export function useUSIndices() {
 }
 
 export function useUSQuote(symbol: string | null) {
-  const [data, setData] = useState<any | null>(null)
+  const [data, setData] = useState<StockQuote | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -679,7 +679,7 @@ export function useUSQuote(symbol: string | null) {
 }
 
 export function useHKSpotList(sortBy = '', sortOrder = 'desc', filters: Record<string, number> = {}) {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<StockQuote[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -735,7 +735,7 @@ export function useHKSpotList(sortBy = '', sortOrder = 'desc', filters: Record<s
 }
 
 export function useUSSpotList(sortBy = '', sortOrder = 'desc', filters: Record<string, number> = {}) {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<StockQuote[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -793,7 +793,7 @@ export function useUSSpotList(sortBy = '', sortOrder = 'desc', filters: Record<s
 // ── Cross-market K-line hooks ──
 
 export function useHKKLine(code: string | null, period = 'daily') {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<KLineItem[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -816,7 +816,7 @@ export function useHKKLine(code: string | null, period = 'daily') {
 }
 
 export function useUSKLine(symbol: string | null, period = 'daily') {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<KLineItem[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
