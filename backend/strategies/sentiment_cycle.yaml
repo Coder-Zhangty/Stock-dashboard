@@ -1,0 +1,29 @@
+name: 情绪周期
+aliases: [市场情绪, Sentiment Cycle, 贪婪恐惧]
+category: sentiment
+description: |
+  根据市场整体情绪判断买卖时机：恐慌时买入、贪婪时卖出。
+  通过涨跌比、成交额、新闻舆情等维度综合评估市场情绪温度。
+
+judgment_criteria: |
+  1. 全市场上涨家数 < 20%（极度恐慌）→ 买入信号
+  2. 全市场上涨家数 > 80%（极度贪婪）→ 卖出信号
+  3. 结合成交量变化判断情绪持续性
+  4. 北向资金流向辅助判断外资情绪
+
+scoring:
+  base_score: 50
+  bonuses:
+    - condition: 恐慌后出现放量反弹
+      score: +25
+    - condition: 北向资金连续3日净流入
+      score: +15
+  penalties:
+    - condition: 贪婪阶段出现缩量滞涨
+      score: -20
+    - condition: 涨跌家数剧烈波动（不稳定）
+      score: -15
+
+tools_required: [get_market_breadth, get_northbound_flow]
+risk_level: medium
+hold_period: 中线（5-30交易日）

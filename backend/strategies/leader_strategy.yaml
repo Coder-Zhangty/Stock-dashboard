@@ -1,0 +1,29 @@
+name: 龙头战法
+aliases: [板块龙头, Leader Stock, 强势股]
+category: momentum
+description: |
+  追踪板块中涨幅最大、资金最集中的龙头股。龙头股具有先涨后跌、
+  涨幅最大的特征，是短线交易者追逐的核心标的。
+
+judgment_criteria: |
+  1. 当日涨幅在所属板块排名前3
+  2. 换手率 > 3%（活跃度高）
+  3. 成交量 > 近5日均量的1.5倍
+  4. 股价创近10日新高
+
+scoring:
+  base_score: 55
+  bonuses:
+    - condition: 连续2日涨停或涨幅>7%
+      score: +20
+    - condition: 板块整体涨幅>2%（板块共振）
+      score: +15
+  penalties:
+    - condition: 换手率>20%（过度投机）
+      score: -20
+    - condition: 盘中多次开板
+      score: -25
+
+tools_required: [get_realtime_quote, get_kline]
+risk_level: high
+hold_period: 超短线（1-3交易日）

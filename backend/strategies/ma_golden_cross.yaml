@@ -1,0 +1,37 @@
+name: 均线金叉
+aliases: [MA金叉, Golden Cross, 金叉买入]
+category: trend_following
+description: |
+  短期均线从下方向上穿越长期均线，是典型的看涨启动信号。
+  金叉确认趋势由空转多，是趋势跟踪策略的经典入场点。
+
+judgment_criteria: |
+  1. MA5 上穿 MA10 或 MA20（收盘价确认）
+  2. 成交量至少是前5日均量的1.2倍（放量确认，防假突破）
+  3. MACD 处于零轴上方或即将金叉（动能配合）
+  4. 股价位于 MA60 上方（中长期趋势保护，避免弱势反弹）
+
+scoring:
+  base_score: 60
+  bonuses:
+    - condition: 金叉日成交量放大1.5倍以上
+      score: +15
+    - condition: MA5同时上穿MA10和MA20（三线开花）
+      score: +20
+    - condition: MACD正值区域金叉
+      score: +10
+  penalties:
+    - condition: MACD负值区金叉（弱势反弹）
+      score: -20
+    - condition: 股价低于MA60
+      score: -15
+    - condition: 成交量萎缩（量比<0.8）
+      score: -10
+
+tools_required:
+  - get_kline
+  - compute_ma
+  - compute_macd
+
+risk_level: medium
+hold_period: 波段（5-20交易日）

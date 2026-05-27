@@ -1,0 +1,29 @@
+name: 预期重定价
+aliases: [基本面改善, Expectation Repricing, 价值重估]
+category: fundamental
+description: |
+  公司基本面出现积极变化但市场尚未充分定价时买入。
+  关注业绩拐点、新产品放量、管理层改善等信号。
+
+judgment_criteria: |
+  1. 最新季报显示营收或利润增速环比大幅改善（>30%）
+  2. PE估值仍低于历史中位数
+  3. 近期有机构调研或买入评级
+  4. 技术面出现底部形态
+
+scoring:
+  base_score: 55
+  bonuses:
+    - condition: 营收和利润同时超预期
+      score: +20
+    - condition: 公司回购或高管增持
+      score: +15
+  penalties:
+    - condition: 一次性收益导致的好转（不可持续）
+      score: -20
+    - condition: 市场已提前反应（利好出尽）
+      score: -15
+
+tools_required: [get_kline, get_stock_brief, get_news]
+risk_level: medium
+hold_period: 中线（20-60交易日）

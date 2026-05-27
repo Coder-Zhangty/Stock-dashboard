@@ -1,0 +1,29 @@
+name: 热门题材
+aliases: [题材股, Hot Theme, 概念炒作]
+category: momentum
+description: |
+  追逐市场热门题材（AI、新能源、低空经济等），题材驱动是A股重要的
+  短期收益来源。核心是判断题材的级别和持续性。
+
+judgment_criteria: |
+  1. 股票属于当前市场最热门的前3个题材板块
+  2. 板块内有3只以上涨停股（板块效应）
+  3. 个股换手率 > 5%（资金关注度高）
+  4. 题材有实质性政策或产业支撑
+
+scoring:
+  base_score: 50
+  bonuses:
+    - condition: 政策级别为国家层面（高确定性）
+      score: +25
+    - condition: 板块内涨停股>5只（强板块效应）
+      score: +15
+  penalties:
+    - condition: 题材已持续炒作超过2周（退潮风险）
+      score: -20
+    - condition: 仅靠消息面缺乏基本面支撑
+      score: -15
+
+tools_required: [get_realtime_quote, get_sectors, get_news]
+risk_level: high
+hold_period: 超短线（1-5交易日）

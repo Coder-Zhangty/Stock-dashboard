@@ -1,0 +1,35 @@
+name: 缩量回调
+aliases: [回调买入, Pullback, 洗盘回踩]
+category: trend_following
+description: |
+  上升趋势中，股价出现小幅回调但成交量明显萎缩，表明抛压不大，
+  是主力洗盘而非出货的信号。回调至均线支撑位是加仓良机。
+
+judgment_criteria: |
+  1. 股价处于MA20上方（上升趋势未破）
+  2. 近3日成交量 < 近20日均量的60%（缩量确认）
+  3. 股价回踩MA10或MA20获得支撑
+  4. 回调幅度不超过前一波上涨的50%
+
+scoring:
+  base_score: 60
+  bonuses:
+    - condition: 回踩MA20后立即反弹收阳
+      score: +20
+    - condition: 缩量期间K线实体缩小（窄幅整理）
+      score: +15
+    - condition: KDJ低位拐头金叉
+      score: +10
+  penalties:
+    - condition: 放量跌破MA20（趋势破坏）
+      score: -30
+    - condition: 回调幅度>前波涨幅的50%
+      score: -15
+
+tools_required:
+  - get_kline
+  - compute_ma
+  - compute_kdj
+
+risk_level: low
+hold_period: 波段（5-15交易日）

@@ -1,0 +1,29 @@
+name: 高质量成长
+aliases: [成长股, Quality Growth, 价值成长]
+category: fundamental
+description: |
+  选择基本面优秀、业绩持续增长的成长型公司。
+  关注ROE、营收增长率、净利润增长率和合理的PE估值。
+
+judgment_criteria: |
+  1. PE(TTM) 在行业合理范围内（非负且非极端）
+  2. 营收连续2年增长 > 15%
+  3. 机构持仓比例较高
+  4. 股价在MA60上方（中期趋势健康）
+
+scoring:
+  base_score: 60
+  bonuses:
+    - condition: PE < 行业平均的80%（低估）
+      score: +20
+    - condition: ROE > 15%
+      score: +15
+  penalties:
+    - condition: PE > 行业平均的2倍（高估）
+      score: -20
+    - condition: 最新财报不及预期
+      score: -25
+
+tools_required: [get_realtime_quote, get_kline, get_stock_brief]
+risk_level: low
+hold_period: 长线（60+交易日）

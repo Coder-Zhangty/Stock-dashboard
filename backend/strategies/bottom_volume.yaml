@@ -1,0 +1,34 @@
+name: 底部放量
+aliases: [底部反转, Bottom Volume, 放量止跌]
+category: reversal
+description: |
+  股价经过长期下跌后，在低位出现成交量显著放大并伴随价格止跌回升，
+  可能是主力资金介入的信号，是底部反转的经典形态。
+
+judgment_criteria: |
+  1. 股价处于近60日低位区域（距离最低点<15%）
+  2. 当日成交量 > 近20日均量的2倍
+  3. 收盘价高于开盘价（当日收阳）
+  4. MACD柱状线开始缩短或在低位金叉
+
+scoring:
+  base_score: 55
+  bonuses:
+    - condition: 连续2日放量且收阳
+      score: +20
+    - condition: 量比>3（极度放量，大资金进场信号）
+      score: +15
+    - condition: 出现长下影线（盘中探底回升）
+      score: +10
+  penalties:
+    - condition: 放量但收阴（出货嫌疑）
+      score: -25
+    - condition: 股价仍在下跌趋势中（创新低）
+      score: -20
+
+tools_required:
+  - get_kline
+  - compute_ma
+
+risk_level: high
+hold_period: 短线（3-10交易日）

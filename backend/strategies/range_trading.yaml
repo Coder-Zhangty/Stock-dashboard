@@ -1,0 +1,36 @@
+name: 箱体震荡
+aliases: [横盘整理, Range Trading, 波段操作]
+category: mean_reversion
+description: |
+  股价在一定区间内反复震荡，未出现明确趋势。在箱体下沿买入、上沿卖出，
+  适合在无明显趋势的市场中获取波段收益。
+
+judgment_criteria: |
+  1. 近20日价格波动幅度 < 15%（确认横盘）
+  2. 股价接近箱体下沿（距离20日最低<3%）
+  3. 均线交织无明显发散方向
+  4. BOLL轨道收窄（带宽处于低位）
+
+scoring:
+  base_score: 50
+  bonuses:
+    - condition: 触及下沿时出现缩量企稳
+      score: +20
+    - condition: 箱体持续时间>30日（整理充分）
+      score: +15
+    - condition: KDJ在超卖区金叉
+      score: +10
+  penalties:
+    - condition: 放量跌破箱体下沿（破位风险）
+      score: -30
+    - condition: 振幅放大（箱体可能被打破）
+      score: -15
+
+tools_required:
+  - get_kline
+  - compute_ma
+  - compute_boll
+  - compute_kdj
+
+risk_level: medium
+hold_period: 波段（5-15交易日）

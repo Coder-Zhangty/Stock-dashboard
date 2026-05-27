@@ -1,0 +1,29 @@
+name: 禅论
+aliases: [缠论, Chan Theory, 中枢分析]
+category: technical
+description: |
+  基于缠中说禅理论的价格结构分析：通过顶底分型、笔、线段、
+  中枢来识别走势类型和买卖点。一买(背驰)、二买(回踩确认)、三买(突破确认)。
+
+judgment_criteria: |
+  1. 识别最近一个中枢（至少3段重叠的价格区间）
+  2. 一买：向下离开中枢出现背驰（MACD面积缩小）
+  3. 二买：一买后回踩不进中枢
+  4. 三买：向上离开中枢后回踩不进中枢
+
+scoring:
+  base_score: 55
+  bonuses:
+    - condition: 三类买卖点共振
+      score: +20
+    - condition: 背驰程度明显（MACD面积比值<0.5）
+      score: +15
+  penalties:
+    - condition: 中枢级别过小（<5根K线）
+      score: -15
+    - condition: 没有明显背驰信号
+      score: -20
+
+tools_required: [get_kline, compute_macd]
+risk_level: medium
+hold_period: 波段（5-30交易日）

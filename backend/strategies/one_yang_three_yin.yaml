@@ -1,0 +1,29 @@
+name: 一阳三阴
+aliases: [洗盘回踩, 阳包阴, 拉升前兆]
+category: reversal
+description: |
+  上涨途中出现一根阳线后紧跟2-3根小阴线，成交量递减，
+  是主力洗盘而非出货的信号。阳线后的阴线回调是买入机会。
+
+judgment_criteria: |
+  1. 前一根阳线涨幅 > 3%且成交量放大
+  2. 后续阴线实体逐步缩小
+  3. 阴线成交量逐步递减（缩量洗盘）
+  4. 回调未跌破阳线开盘价
+
+scoring:
+  base_score: 55
+  bonuses:
+    - condition: 最后一根阴线出现长下影线（探底信号）
+      score: +20
+    - condition: 阴线缩量至阳线量能的30%以下
+      score: +15
+  penalties:
+    - condition: 跌破阳线开盘价
+      score: -25
+    - condition: 阴线量能未缩减
+      score: -15
+
+tools_required: [get_kline]
+risk_level: medium
+hold_period: 短线（3-10交易日）

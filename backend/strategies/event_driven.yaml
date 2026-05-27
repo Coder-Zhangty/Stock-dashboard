@@ -1,0 +1,29 @@
+name: 事件驱动
+aliases: [财报驱动, Event Driven, 政策利好]
+category: event_driven
+description: |
+  基于财报发布、政策出台、并购重组等重大事件进行交易。
+  事件驱动的核心是判断事件影响的大小和持续性。
+
+judgment_criteria: |
+  1. 近期出现重大事件（财报超预期/政策利好/并购公告）
+  2. 事件后成交量放大（市场关注度高）
+  3. 股价在事件后未出现"利好出尽"式下跌
+  4. 事件影响具有持续性（非一次性）
+
+scoring:
+  base_score: 55
+  bonuses:
+    - condition: 事件后连续3日上涨
+      score: +20
+    - condition: 多家机构上调评级
+      score: +15
+  penalties:
+    - condition: 事件日高开低走（出货信号）
+      score: -25
+    - condition: 事件已被市场充分预期
+      score: -15
+
+tools_required: [get_kline, get_news]
+risk_level: high
+hold_period: 短线（1-10交易日）

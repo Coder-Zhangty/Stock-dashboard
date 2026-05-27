@@ -1,0 +1,36 @@
+name: 放量突破
+aliases: [突破追涨, Volume Breakout, 突破买入]
+category: breakout
+description: |
+  股价放量突破关键阻力位（前高/箱体上沿/MA60），表明多方力量强劲，
+  有效突破后往往有一波拉升行情。关键看突破的力度和量能配合。
+
+judgment_criteria: |
+  1. 股价突破近30日最高价或BOLL上轨
+  2. 突破日成交量 > 近20日均量的1.5倍
+  3. 收盘价站稳在突破位上方（非盘中刺穿）
+  4. MACD处于金叉状态
+
+scoring:
+  base_score: 60
+  bonuses:
+    - condition: 量比>2（极度放量突破）
+      score: +20
+    - condition: 突破时跳空高开（强势信号）
+      score: +15
+    - condition: 突破的阻力位之前被测试过2次以上
+      score: +10
+  penalties:
+    - condition: 突破后次日即跌回（假突破）
+      score: -30
+    - condition: 缩量突破（量能不配合）
+      score: -15
+
+tools_required:
+  - get_kline
+  - compute_ma
+  - compute_macd
+  - compute_boll
+
+risk_level: medium
+hold_period: 短线（3-10交易日）

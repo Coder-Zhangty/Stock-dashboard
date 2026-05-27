@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8021:8021"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

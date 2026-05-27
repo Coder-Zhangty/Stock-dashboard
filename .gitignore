@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Secrets & environment
+.env
+.env.local
+.env.production
+部署命令.txt
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+*.egg-info/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Claude Code
+.claude/
+
+# Logs
+*.log
+logs/
+
+# Test cache
+.pytest_cache/
+.tox/
+coverage/

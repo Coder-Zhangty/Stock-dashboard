@@ -1,0 +1,29 @@
+name: 底部反转形态
+aliases: [W底, 头肩底, 双重底, Reversal Pattern]
+category: reversal
+description: |
+  识别经典的反转K线形态：W底、头肩底、圆弧底等。
+  形态形成后配合成交量确认，判断趋势由空转多的转折点。
+
+judgment_criteria: |
+  1. W底：两个低点接近，右底成交量小于左底
+  2. 突破颈线时成交量放大（确认信号）
+  3. 头肩底：左肩-头部-右肩，成交量递减
+  4. 右肩形成后向上突破
+
+scoring:
+  base_score: 60
+  bonuses:
+    - condition: 突破颈线时量比>2
+      score: +20
+    - condition: 形态跨度>20日（底部充分）
+      score: +15
+  penalties:
+    - condition: 颈线突破后量能不足
+      score: -20
+    - condition: 形态不对称或变形严重
+      score: -15
+
+tools_required: [get_kline]
+risk_level: medium
+hold_period: 中线（10-40交易日）

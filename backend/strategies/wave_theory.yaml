@@ -1,0 +1,29 @@
+name: 波浪理论
+aliases: [艾略特波浪, Elliott Wave, 5浪结构]
+category: technical
+description: |
+  基于艾略特波浪理论判断价格运动的5浪推动+3浪调整结构。
+  核心是识别当前处于哪个浪的位置，判断后续走势方向。
+
+judgment_criteria: |
+  1. 识别推动浪：1-2-3-4-5浪结构
+  2. 判断当前位置：3浪（最强）或5浪（末升段）
+  3. 3浪成交量应大于1浪（确认主升浪）
+  4. 5浪出现量价背离需警惕
+
+scoring:
+  base_score: 50
+  bonuses:
+    - condition: 3浪确认（量价配合最佳）
+      score: +25
+    - condition: 4浪回踩不破1浪顶
+      score: +15
+  penalties:
+    - condition: 数浪不清晰（主观判断成分大）
+      score: -20
+    - condition: 5浪出现顶背离信号
+      score: -15
+
+tools_required: [get_kline, compute_macd]
+risk_level: high
+hold_period: 中线（10-60交易日）

@@ -1,0 +1,36 @@
+name: 多头趋势
+aliases: [多头排列, Bullish Trend, 趋势跟踪]
+category: trend_following
+description: |
+  多条均线呈多头排列（短期在上、长期在下），表明多方力量持续占优。
+  趋势一旦形成不会轻易改变，顺势而为是中长线投资的核心思路。
+
+judgment_criteria: |
+  1. MA5 > MA10 > MA20 > MA60（均线多头排列）
+  2. 股价在 MA10 上方运行
+  3. MACD 的 DIF 和 DEA 均大于零
+  4. 近20日累计涨幅不超过30%（避免追高）
+
+scoring:
+  base_score: 65
+  bonuses:
+    - condition: 均线发散角度增大（趋势加速）
+      score: +15
+    - condition: 成交量温和放大（量比1.0-1.5）
+      score: +10
+    - condition: BOLL中轨向上倾斜
+      score: +10
+  penalties:
+    - condition: 近5日涨幅超15%（短期过热）
+      score: -20
+    - condition: 均线开始收敛（趋势减弱）
+      score: -15
+
+tools_required:
+  - get_kline
+  - compute_ma
+  - compute_macd
+  - compute_boll
+
+risk_level: low
+hold_period: 中线（10-60交易日）
