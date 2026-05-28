@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.api.deps import get_current_user, verify_csrf
+from app.api.deps import get_current_user, SessionUser
 from app.core.config import settings as app_settings
-from app.schemas.auth import SessionUser
 from app.schemas.platform import (
     ConversationResponse,
     CreateConversationRequest,
@@ -27,7 +26,7 @@ def list_conversations(
 @router.post("", response_model=ConversationResponse)
 def create_conversation(
     payload: CreateConversationRequest,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
     settings = Depends(lambda: app_settings),
 ) -> ConversationResponse:
@@ -42,7 +41,7 @@ def create_conversation(
 @router.post("/import-local", response_model=list[ConversationResponse])
 def import_local_conversations(
     payload: ImportLocalConversationsRequest,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
     settings = Depends(lambda: app_settings),
 ) -> list[ConversationResponse]:
@@ -68,7 +67,7 @@ def get_conversation(
 def update_conversation(
     conversation_id: str,
     payload: UpdateConversationRequest,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
     settings = Depends(lambda: app_settings),
 ) -> ConversationResponse:
@@ -88,7 +87,7 @@ def update_conversation(
 @router.delete("/{conversation_id}")
 def delete_conversation(
     conversation_id: str,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
     settings = Depends(lambda: app_settings),
 ) -> dict[str, bool]:
@@ -111,7 +110,7 @@ def list_conversation_messages(
 def replace_conversation_messages(
     conversation_id: str,
     payload: ReplaceConversationMessagesRequest,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
     settings = Depends(lambda: app_settings),
 ) -> list[MessageResponse]:

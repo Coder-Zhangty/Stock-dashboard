@@ -5,7 +5,6 @@ from fastapi.responses import HTMLResponse
 
 from app.services import news_service, news_reader, report_service
 from app.services.report_generator import generate_html_report
-from app.api.deps import rate_limit
 
 router = APIRouter(prefix="/api/news", tags=["news"])
 
@@ -14,14 +13,14 @@ router = APIRouter(prefix="/api/news", tags=["news"])
 async def latest_news(
     limit: int = 50,
     offset: int = 0,
-    _: None = rate_limit(max_requests=30, window_seconds=5),
+
 ):
     return await news_service.get_all_news(limit, offset)
 
 
 @router.post("/refresh")
 async def refresh_news(
-    _: None = rate_limit(max_requests=3, window_seconds=30),
+
 ):
     return await news_service.refresh_news()
 
@@ -39,7 +38,7 @@ async def news_summary():
 
 @router.post("/summary/refresh")
 async def refresh_summary(
-    _: None = rate_limit(max_requests=1, window_seconds=60),
+
 ):
     """Manually trigger a news summary refresh."""
     return await news_service.refresh_news_summary()
@@ -110,7 +109,7 @@ async def latest_report(type: str = "daily"):
 @router.post("/reports/generate")
 async def generate_report(
     type: str = "daily",
-    _: None = rate_limit(max_requests=1, window_seconds=60),
+
 ):
     """Manually trigger a report generation."""
     if type == "daily":

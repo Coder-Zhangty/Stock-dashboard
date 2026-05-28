@@ -1,7 +1,5 @@
 const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim() ?? ''
 const fallbackBaseUrls = ['']
-const CSRF_COOKIE_NAME = 'aurora_csrf'
-const CSRF_HEADER_NAME = 'X-CSRF-Token'
 
 const getCandidateBaseUrls = () => {
   const values = [configuredBaseUrl, ...fallbackBaseUrls].filter(
@@ -93,14 +91,7 @@ const readCookie = (name: string) => {
 }
 
 const buildHeaders = (options: RequestOptions) => {
-  const headers = new Headers(options.headers)
-  if (!headers.has(CSRF_HEADER_NAME)) {
-    const csrfToken = readCookie(CSRF_COOKIE_NAME)
-    if (csrfToken) {
-      headers.set(CSRF_HEADER_NAME, csrfToken)
-    }
-  }
-  return headers
+  return new Headers(options.headers)
 }
 
 export const getApiBaseUrl = () => configuredBaseUrl

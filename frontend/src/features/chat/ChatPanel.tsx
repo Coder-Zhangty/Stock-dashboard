@@ -76,7 +76,7 @@ function LoginForm() {
     setError(null)
     setLoading(true)
     try {
-      await login({ email: email.trim(), password, captchaToken: 'human-pass' })
+      await login({ email: email.trim(), password })
       window.location.reload()
     } catch (err) {
       setError(err instanceof Error ? err.message : '登录失败')

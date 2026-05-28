@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Query
 
 from app.services import market_service
-from app.api.deps import rate_limit
 
 router = APIRouter(prefix="/api/market", tags=["market"])
 
@@ -14,7 +13,7 @@ async def spot_list(
     page_size: int = 100,
     sort_by: str = "",
     sort_order: str = "desc",
-    _: None = rate_limit(max_requests=30, window_seconds=5),
+
     price_min: float | None = None,
     price_max: float | None = None,
     change_min: float | None = None,
@@ -68,7 +67,7 @@ async def kline(code: str, period: str = "daily", count: int = 120):
 @router.get("/batch")
 async def batch_quotes(
     codes: str = Query(...),
-    _: None = rate_limit(max_requests=10, window_seconds=5),
+
 ):
     """Batch fetch quotes for multiple codes (comma-separated)."""
     code_list = [c.strip() for c in codes.split(",") if c.strip()]
@@ -84,7 +83,6 @@ async def market_index():
 @router.get("/search")
 async def search(
     q: str = Query(..., min_length=1),
-    _: None = rate_limit(max_requests=20, window_seconds=5),
 ):
     """Search stocks by code or name."""
     return await market_service.search_stock(q)

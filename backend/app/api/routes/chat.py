@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 
-from app.api.deps import get_current_user, get_optional_user, verify_csrf
+from app.api.deps import get_current_user, get_optional_user, SessionUser
 from app.core.config import settings
-from app.schemas.auth import SessionUser
 from app.schemas.chat import ChatRequest
 from app.schemas.preferences import (
     UserMemoryResponse,
@@ -23,7 +22,7 @@ router = APIRouter(prefix="/chat")
 @router.post("")
 async def chat(
     request: ChatRequest,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
 ) -> StreamingResponse:
     service = ChatService(settings)
@@ -71,7 +70,7 @@ def get_preferences(
 @router.put("/preferences", response_model=UserPreferenceResponse)
 def update_preferences(
     payload: UserPreferenceUpdateRequest,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
 ) -> UserPreferenceResponse:
     return UserMemoryService(settings).update_preferences(user.id, payload)
@@ -87,7 +86,7 @@ def list_memories(
 @router.delete("/memories/{memory_id}")
 def delete_memory(
     memory_id: str,
-    _: None = Depends(verify_csrf),
+
     user: SessionUser = Depends(get_current_user),
 ) -> dict[str, bool]:
     deleted = UserMemoryService(settings).delete_memory(user.id, memory_id)
