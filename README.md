@@ -130,6 +130,4 @@ MIT License — 详见 [LICENSE](LICENSE)
 
 ---
 
-<div align="center">
-  <sub>Built with ❤️ for traders · 为交易而生</sub>
-</div>
+
