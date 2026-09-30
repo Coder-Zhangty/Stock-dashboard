@@ -124,14 +124,6 @@ trade-dashboard/
 
 ---
 
-## 🔒 安全提醒 | Security Notice
-
-- **永远不要** 将 `.env` 或包含密钥的文件提交到 Git
-- 仓库已配置 `.gitignore`，自动忽略 `.env`、`*.db`、`node_modules/` 等
-- 首次部署前务必修改 `backend/.env` 中的默认管理员密码
-
----
-
 ## 📄 许可 | License
 
 MIT License — 详见 [LICENSE](LICENSE)
