@@ -49,3 +49,10 @@ logs/
 .pytest_cache/
 .tox/
 coverage/
+
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
